@@ -146,50 +146,15 @@ def lin_comb_vec_mat_mult(v, M):
     return sum([v[key] * value for (key, value) in mat2rowdict(M).items()])
 
 ## Problem 13
-def dot_product_mat_vec_mult(M, v):    
-  assert(M.D[1] == v.D)  
-     
-  # 1 - Create a rowdict of M    
-  rowdict = mat2rowdict(M)   
- 
-  # 2 - Apply dot-product using a comprehension    
-  return Vec(M.D[0], {key: v * rowdict[key] for key in M.D[0]})
-
-## Problem 14
-def dot_product_vec_mat_mult(v, M):    
-  assert(v.D == M.D[0])        
-
-  # 1 - Create a coldict from M    
-  coldict = mat2coldict(M)    
-
-  # 2 - Apply the dot-product and return    
-  return Vec(M.D[1], {key: v * coldict[key] for key in M.D[1]})
-
-"""
-## Problem 13
 def dot_product_mat_vec_mult(M, v):
     assert(M.D[1] == v.D)
     return Vec(M.D[0], {k: v* u for k,u in mat2rowdict(M).items()})
-
-M1 = Mat(({1,2,3}, {1,2,3}), { (1,1): 1, (1,2):10, (1,3):2, (2,1):1, (2,2):2, (2,3):3, (3,1):2,(3,2):2,(3,3):1})
-v2 = Vec({1,2, 3}, {1:1, 2:2, 3:0})
-y1 = lin_comb_mat_vec_mult(M1, v2)
-y2 = dot_product_mat_vec_mult(M1,v2)
-print(y2)
-print(y1)
-print(M1*v2)
 
 ## Problem 14
 def dot_product_vec_mat_mult(v, M):
     assert(v.D == M.D[0])
     return Vec(M.D[1], {k: v* u for k,u in mat2coldict(M).items()})
 
-y1 = lin_comb_vec_mat_mult(v2, M1)
-y2 = dot_product_vec_mat_mult(v2, M1)
-print(y2)
-print(y1)
-print(v2 * M1)
-"""
 ## Problem 15
 def Mv_mat_mat_mult(A, B):
     assert A.D[1] == B.D[0]

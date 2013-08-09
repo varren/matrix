@@ -12,7 +12,7 @@ def setitem(v,d,val):
 def equal(u,v):
     "Returns true iff u is equal to v"
     assert u.D == v.D
-    return {getitem(u, d) for d in u.D}  == {getitem(v, d) for d in v.D}
+    return [getitem(u, d) for d in u.D]  == [getitem(v, d) for d in v.D]
 
 def add(u,v):
     "Returns the sum of the two vectors"
@@ -22,18 +22,17 @@ def add(u,v):
 def dot(u,v):
     "Returns the dot product of the two vectors"
     assert u.D == v.D
-    return sum({getitem(v,d) * getitem(u,d) for d in u.D})
+    return sum([getitem(v,d) * getitem(u,d) for d in u.D])
 
 
 def scalar_mul(v, alpha):
     "Returns the scalar-vector product alpha times v"
-    return Vec(v.D, {d: getitem(v,d) * alpha for d in v.D})
+    return Vec(v.D, {d: (getitem(v,d) * alpha) for d in v.D})
 
 
 def neg(v):
     "Returns the negation of a vector"
-    return Vec(v.D, {d: getitem(v,d) * -1 for d in v.D})
-
+    return scalar_mul(v, -1)
 
 ##### NO NEED TO MODIFY BELOW HERE #####
 class Vec:
