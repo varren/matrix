@@ -1,14 +1,14 @@
 from vec import Vec
 from mat import Mat
 
-def identity(D, one):
+def identity(D, par):
   """Given a set D and the field's one, returns the DxD identity matrix
   e.g.:
   
   >>> identity({0,1,2}, 1)
   Mat(({0, 1, 2}, {0, 1, 2}), {(0, 0): 1, (1, 1): 1, (2, 2): 1})
   """
-  return Mat((D,D), {(d,d):1 for d in D})
+  return Mat((D,D), {(d,d):par for d in D})
 
 def keys(d):
   """Given a dict, returns something that generates the keys; given a list,
