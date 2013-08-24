@@ -25,7 +25,7 @@ def int2GF2(i):
         >>> int2GF2(100)
         0
     '''
-    pass
+    return one if i%2 else 0
 
 ## Task 2
 def make_Vec(primeset, factors):
@@ -41,7 +41,7 @@ def make_Vec(primeset, factors):
         >>> make_Vec({2,3,11}, [(2,3), (3,2)]) == Vec({2,3,11},{2:one})
         True
     '''
-    pass
+    return Vec(primeset, {k: int2GF2(v) for (k,v) in factors})
 
 ## Task 3
 def find_candidates(N, primeset):
@@ -58,9 +58,21 @@ def find_candidates(N, primeset):
                    primeset-vector over GF(2) corresponding to a_i
           such that len(roots) = len(rowlist) and len(roots) > len(primeset)
     '''
-    pass
+    roots = []
+    rowlist = []
+    x = intsqrt(N) + 1
 
+    while True:
+        x += 1
+        factors = dumb_factor(x*x - N, primeset) 
+        
+        if factors != []:
+            roots.append(x)
+            rowlist.append(make_Vec(primeset, factors))
 
+        if len(roots) > len(primeset):
+            return (roots, rowlist)
+        
 
 ## Task 4
 def find_a_and_b(v, roots, N):
@@ -74,8 +86,27 @@ def find_a_and_b(v, roots, N):
       such that a*a-b*b is a multiple of N
       (if v is correctly chosen)
     '''
-    pass
+    
+    alist = [roots[x]for x in range(len(roots)) if v[x]]
+    a = prod(alist)
+    c = prod([x*x-N for x in alist])
+    b = intsqrt(c)
+    assert b*b == c
+    return (a,b)
+
+
 
 ## Task 5
-
-smallest_nontrivial_divisor_of_2461799993978700679 = ... 
+def solve():
+    N = 2461799993978700679
+    primelist = primes(10000)
+    roots, rowlist =  find_candidates(N, primelist)
+    M = echelon.transformation_rows(rowlist)
+    
+    for v in reversed(M):
+        a,b = find_a_and_b(v, roots, N)
+        if gcd(a-b,N) != 1:
+            return gcd(a-b,N)
+    
+    
+smallest_nontrivial_divisor_of_2461799993978700679 =  solve()
