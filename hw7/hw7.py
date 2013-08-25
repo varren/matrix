@@ -2,11 +2,12 @@
 # Please fill out this stencil and submit using the provided submission script.
 
 from orthogonalization import orthogonalize
+from triangular import triangular_solve_n
 import orthonormalization
-from mat import Mat
+from mat import Mat, transpose
 from vec import Vec
 from vecutil import list2vec
-from matutil import listlist2mat
+from matutil import listlist2mat, mat2rowdict
 
 
 
@@ -18,7 +19,7 @@ def basis(vlist):
     Output:
         - a list of linearly independent Vecs with equal span to vlist
     '''
-    pass
+    return [x for x in orthogonalize(vlist) if x*x > 10**-20]
 
 
 
@@ -30,7 +31,8 @@ def subset_basis(vlist):
     Output:
         - linearly independent subset of vlist with the same span as vlist
     '''
-    pass
+    O = orthogonalize(vlist)
+    return [vlist[x] for x in range(len(vlist)) if O[x]*O[x] >10**-20 ]
 
 
 
@@ -48,7 +50,7 @@ def orthogonal_vec2rep(Q, b):
         >>> orthogonal_vec2rep(Q, b) == Vec({0, 1},{0: 8, 1: 4})
         True
     '''
-    pass
+    return Q*b
 
 
 
@@ -68,7 +70,7 @@ def orthogonal_change_of_basis(A, B, a):
         >>> orthogonal_change_of_basis(A, B, a) == Vec({0, 1, 2},{0: 8, 1: 2, 2: 6})
         True
     '''
-    pass
+    return a*A*B
 
 
 
@@ -86,9 +88,7 @@ def orthonormal_projection_orthogonal(W, b):
         >>> orthonormal_projection_orthogonal(W, b) == Vec({0, 1, 2},{0: 0, 1: 0, 2: 4})
         True
     '''
-    pass
-
-
+    return b-W*b*W
 
 ## Problem 6
 # Write your solution for this problem in orthonormalization.py.
@@ -102,21 +102,24 @@ def orthonormal_projection_orthogonal(W, b):
 
 ## Problem 8
 # Please give each solution as a Vec
+def solve8(A,Q,R,b):
+    c =  transpose(Q) * b
+    x = triangular_solve_n(mat2rowdict(R), c)
+    return x
 
 least_squares_A1 = listlist2mat([[8, 1], [6, 2], [0, 6]])
 least_squares_Q1 = listlist2mat([[.8,-0.099],[.6, 0.132],[0,0.986]])
 least_squares_R1 = listlist2mat([[10,2],[0,6.08]]) 
 least_squares_b1 = list2vec([10, 8, 6])
 
-x_hat_1 = ...
-
+x_hat_1 = solve8(least_squares_A1, least_squares_Q1, least_squares_R1, least_squares_b1)
 
 least_squares_A2 = listlist2mat([[3, 1], [4, 1], [5, 1]])
 least_squares_Q2 = listlist2mat([[.424, .808],[.566, .115],[.707, -.577]])
 least_squares_R2 = listlist2mat([[7.07, 1.7],[0,.346]])
 least_squares_b2 = list2vec([10,13,15])
 
-x_hat_2 = ...
+x_hat_2 = solve8(least_squares_A2, least_squares_Q2, least_squares_R2, least_squares_b2)
 
 
 
@@ -138,5 +141,9 @@ def QR_solve(A, b):
         >>> result * result < 1E-10
         True
     '''
-    pass
+    import QR
+    Q, R = QR.factor(A)
+    c =  transpose(Q) * b
+    x = triangular_solve_n(mat2rowdict(R), c)
+    return x
 
