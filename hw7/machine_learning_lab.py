@@ -15,7 +15,8 @@ def signum(u):
         >>> signum(Vec({1,2,3},{1:2, 2:-1})) == Vec({1,2,3},{1:1,2:-1,3:1})
         True
     '''
-    pass
+    return Vec(u.D, {x: 1 if u[x] >=0 else -1 for x in u.D})
+
 
 ## Task 2 ##
 def fraction_wrong(A, b, w):
@@ -28,7 +29,11 @@ def fraction_wrong(A, b, w):
         - Fraction (as a decimal in [0,1]) of vectors incorrectly
           classified by w 
     '''
-    pass
+
+    x = signum(A * w) * b
+    n = len(b.D)
+    q = (n - x)/2
+    return q/n
 
 ## Task 3 ##
 def loss(A, b, w):
@@ -40,7 +45,8 @@ def loss(A, b, w):
     Output:
         - Value of loss function at w for training data
     '''
-    pass
+    x = A * w - b
+    return x*x
 
 ## Task 4 ##
 def find_grad(A, b, w):
@@ -52,7 +58,7 @@ def find_grad(A, b, w):
     Output:
         - Value of the gradient function at w
     '''
-    pass
+    return 2*(A*w-b)*A
 
 ## Task 5 ##
 def gradient_descent_step(A, b, w, sigma):
@@ -66,5 +72,5 @@ def gradient_descent_step(A, b, w, sigma):
         - The vector w' resulting from 1 iteration of gradient descent
           starting from w and moving sigma.
     '''
-    pass
+    return w - sigma*find_grad(A,b,w)
 
